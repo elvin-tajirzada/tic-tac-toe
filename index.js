@@ -11,8 +11,14 @@ let array = [];
 Start();
 
 function Start() {
-    player1 = player1 == undefined ? prompt("Player 1") : player1;
-    player2 = player2 == undefined ? prompt("Player 2") : player2;
+    if(player1 == undefined){
+        let first = prompt("Player 1","Player 1");
+        player1 = first == "" ? "Player 1" : first;
+    }
+    if(player2 == undefined){
+        let second = prompt("Player 2","Player 2");
+        player2 = second == "" ? "Player 2" : second;
+    }
     Arr();
     Table();
     scoreShow();
@@ -21,17 +27,17 @@ function Start() {
 function scoreShow() {
     document.getElementById("player").innerHTML = `${player1} : ${point1} - ${player2} : ${point2}`;
 }
-function scoreCount(par) {
-    return par == x ? point1++ : point2++;
-}
 
+function scoreCount(par) {
+    return par === x ? point1++ : point2++;
+}
 
 function Table() {
     let tr = ``;
     for (let i = 0; i < 3; i++) {
         tr += `<tr>`;
         for (let j = 0; j < 3; j++) {
-            tr += `<td class="text-center align-middle" id="show${i}${j}" onclick="Click(${i},${j})" style="height:75px;">${array[i][j] == undefined ? " " : array[i][j]}</td>`;
+            tr += `<td class="text-center align-middle" onclick="Click(${i},${j});" style="height:75px;">${array[i][j] == undefined ? " " : array[i][j]}</td>`;
         }
         tr += `</tr>`;
     }
@@ -51,21 +57,21 @@ function Click(i, j) {
         } else {
             array[i][j] = x;
         }
+        count++;
+        setTimeout(Check, 250);
+        Table();
     }
-    count++;
-    Table();
-    setTimeout(Check, 250);
 }
 
 function Check() {
     for (let i = 0; i < 3; i++) {
         if (array[i][0] != undefined && array[i][0] == array[i][1] && array[i][1] == array[i][2]) {
-            Finish(array[1][0]);
+            Finish(array[i][0]);
         }
     }
     for (let i = 0; i < 3; i++) {
         if (array[0][i] != undefined && array[0][i] == array[1][i] && array[1][i] == array[2][i]) {
-            Finish(array[0][1]);
+            Finish(array[0][i]);
         }
     }
     if (array[0][0] == array[1][1] && array[1][1] == array[2][2] && array[0][0] != undefined) {
@@ -76,13 +82,13 @@ function Check() {
     }
     if (count == 10) {
         count = 1;
-        alert("Oyun berabere bitdi")
+        alert("The game is a draw")
         Start();
     }
 }
 
-function Win(check) {
-    return check == x ? "Qazandiniz " + player1 : "Qazandiniz " + player2
+function Win(par) {
+    return par === x ? player1 + " won" : player2 + " won"
 }
 
 function Finish(par) {
